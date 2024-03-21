@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .signup-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 300px;
+        text-align: center;
+      }
+
+      .signup-container h2 {
+        margin-bottom: 20px;
+      }
+
+      .signup-form input[type="text"],
+      .signup-form input[type="email"],
+      .signup-form input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .signup-form input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .signup-form input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <h2>Sign Up</h2>
+      <form id="myForm" class="signup-form">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Your Name"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Your Email"
+          required
+        />
+        <input type="submit" value="Sign Up" />
+      </form>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        // Catch form submission
+        $("#myForm").submit(function (event) {
+          // Prevent default form submission
+          event.preventDefault();
+
+          // Make API call
+          $.ajax({
+            url: "https://api.engagespot.com/v3/users/" + "user-001",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+              name: "Anand",
+              email: "anand@engagespot.co",
+            }),
+            headers: {
+              "X-ENGAGESPOT-API-KEY": "ecnp1p3pqpgdh4mb5n0j6",
+              "X-ENGAGESPOT-API-SECRET":
+                "7gpdsngf968a9ngh9jfot2je66eh8c7f132933a038e491a",
+            },
+            success: function (response) {
+              // Handle success response
+              console.log("API response:", response);
+              // Make API call
+              $.ajax({
+                url: "https://api.engagespot.com/v3/notifications",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  notification: {
+                    templateIdentifier: "welcome-email",
+                    data: {
+                      username: $("#name").val(),
+                      password: $("#email").val(),
+                    },
+                  },
+                  sendTo: {
+                    recipients: ["user-001"],
+                  },
+                }),
+                headers: {
+                  "X-ENGAGESPOT-API-KEY": "ecnp1p3pqpgdh4mb5n0j6",
+                  "X-ENGAGESPOT-API-SECRET":
+                    "7gpdsngf968a9ngh9jfot2je66eh8c7f132933a038e491a",
+                },
+                success: function (response) {
+                  // Handle success response
+                  console.log("API response:", response);
+                  window.location="/index.html"
+                },
+                error: function (xhr, status, error) {
+                  // Handle error
+                  console.error("API error:", error);
+                },
+              });
+            },
+            error: function (xhr, status, error) {
+              // Handle error
+              console.error("API error:", error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRM.AI</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .dashboard {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .navbar {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+
+      .navbar h2 {
+        margin: 0;
+      }
+
+      .navbar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+
+      .navbar li {
+        margin-left: 20px;
+        min-height: 20px;
+        line-height: 35px;
+      }
+
+      .navbar li:first-child {
+        margin-left: 0;
+      }
+
+      .navbar a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .navbar a:hover {
+        text-decoration: underline;
+      }
+
+      .bell-icon {
+        font-size: 24px;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .ticket {
+        background-color: #f4f4f4;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+
+      .ticket h3 {
+        margin-top: 0;
+      }
+
+      .ticket p {
+        margin-bottom: 10px;
+      }
+
+      .popup-container {
+        display: none;
+        position: fixed;
+        z-index: 999999999999;
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        z-index: 999999998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      .payment-form input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      #upgradeButton {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #subtotal {
+        margin-top: 10px;
+      }
+
+      #bellIcon{
+
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="https://cdn.engagespot.com/in-app-inbox-v1.x.min.js"
+    ></script>
+  </head>
+  <body>
+    <div id="popupContainer" class="popup-container">
+      <div class="popup-content">
+        <span class="close" id="closePopup">&times;</span>
+        <h2>Upgrade Your Plan</h2>
+        <div class="payment-form">
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" id="cardNumber" name="cardNumber" />
+          <label for="expiryDate">Expiry Date:</label>
+          <input type="text" id="expiryDate" name="expiryDate" />
+          <label for="cvv">CVV:</label>
+          <input type="text" id="cvv" name="cvv" />
+          <button id="upgradeButton">Upgrade Now</button>
+        </div>
+        <div id="subtotal">Subtotal: $99.99</div>
+      </div>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div class="dashboard">
+      <div class="navbar">
+        <h2>CRM.AI</h2>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Tickets</a></li>
+          <li><a href="#">Users</a></li>
+          <li><a href="#">Settings</a></li>
+          <li></li>
+        </ul>
+        <div id="bellIcon"></div>
+      </div>
+      <div class="main-content">
+        <h1>Tickets</h1>
+        <div class="ticket">
+          <h3>Ticket #123: Issue with Login</h3>
+          <p><strong>Status:</strong> Open</p>
+          <p><strong>Priority:</strong> High</p>
+          <p><strong>Assigned to:</strong> John Doe</p>
+          <p><strong>Last Updated:</strong> 2024-03-13 09:00 AM</p>
+        </div>
+        <div class="ticket">
+          <h3>Ticket #124: Payment Gateway Error</h3>
+          <p><strong>Status:</strong> Closed</p>
+          <p><strong>Priority:</strong> Medium</p>
+          <p><strong>Assigned to:</strong> Jane Smith</p>
+          <p><strong>Last Updated:</strong> 2024-03-12 03:30 PM</p>
+        </div>
+        <!-- More tickets go here -->
+      </div>
+    </div>
+    <!-- Font Awesome -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+      integrity="sha512-qQ6fvd/+9GDyr2ENYUlDT3E/VSXjxgXZSWZNX9O0qu3B4xpiFXf5CUqPLrb+gEyGk/fev5XDDoxMSVLRBjCPOQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      Engagespot.render("#bellIcon", {
+        apiKey: "ecnp1p3pqpgdh4mb5n0j6",
+        userId: "user-001",
+        eventListenersToRun: [
+          {
+            blockId: "subscription-reminder_b0_state_1_i0",
+            event: "onClick",
+            onEvent: ({ event, changeNotificationState, getValue }) => {
+                $("#popupContainer").fadeIn();
+                $("#overlay").fadeIn();
+            },
+          },
+          {
+            blockId: "new-reply_b0_state_1_i1",
+            event: "onClick",
+            onEvent:({event, changeNotificationState, getValue}) => {
+              const value = getValue("new-reply_b0_state_1_i0");
+              changeNotificationState({state:'state_2'});
+            }
+          }
+        ],
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $("#openPopup").click(function () {
+          $("#popupContainer").fadeIn();
+          $("#overlay").fadeIn();
+        });
+
+        $("#closePopup, #overlay").click(function () {
+          $("#popupContainer").fadeOut();
+          $("#overlay").fadeOut();
+        });
+
+        // Example upgrade button functionality
+        $("#upgradeButton").click(function () {
+          alert("Upgrade Successful!");
+        });
+      });
+    </script>
+  </body>
+</html>

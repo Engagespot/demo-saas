@@ -87,14 +87,17 @@
           // Prevent default form submission
           event.preventDefault();
 
+          const name = document.getElementById("name").val;
+          const email = document.getElementById("email").val;
+
           // Make API call
           $.ajax({
             url: "https://api.engagespot.com/v3/users/" + "user-001",
             type: "PUT",
             contentType: "application/json",
             data: JSON.stringify({
-              name: "Anand",
-              email: "anand@engagespot.co",
+              name: name,
+              email: email,
             }),
             headers: {
               "X-ENGAGESPOT-API-KEY": "ecnp1p3pqpgdh4mb5n0j6",

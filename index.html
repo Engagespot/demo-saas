@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRM.AI</title>
+    <meta name="viewport" content="width=device-width"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
       body {
@@ -217,6 +218,20 @@
         apiKey: "ecnp1p3pqpgdh4mb5n0j6",
         userId: "user-001",
         eventListenersToRun: [
+        {
+          blockId: "inApp_1_b0_state_1_i0",
+          event: "onClick",
+          onEvent: ({event, notification, changeNotificationState, getValue}) => {
+            console.log(notification);
+          }
+        },
+        {
+          blockId:"inApp_1_b0_state_1_i1",
+          event: "onClick",
+          onEvent: ({ event, changeNotificationState, getValue }) => {
+                changeNotificationState({state:'state_2'});
+            },
+        },
           {
             blockId: "subscription-reminder_b0_state_1_i0",
             event: "onClick",
@@ -234,22 +249,25 @@
             }
           },
           {
-            blockId: "welcome-email_b0_state_1_i0",
+            blockId: "welcome-newpickup_b0_state_1_i0",
             event: "onClick",
             onEvent: ({ event, changeNotificationState, getValue }) => {
-              console.log("calendly click");
-                $("#calendly").fadeIn();
-                $("#overlay").fadeIn();
+              console.log(" clicked the accept button");
+
             },
           },
           {
             blockId: "askforreview_b0_state_1_i2",
-            event: "onClick",
-            onEvent: ({event, changeNotificationState, getValue}) => {
-              const ratingValue = getValue('askforreview_b0_state_1_i0');
-              const feedback = getValue('askforreview_b0_state_1_i2');
-              changeNotificationState({state:'state_2'});
-            }
+            event:"onClick",
+            onEvent: ({ event, changeNotificationState, getValue }) => {
+              console.log("value is", getValue("askforreview_b0_state_1_i0"));
+              console.log("input is", getValue("askforreview_b0_state_1_i1"));
+
+              console.log("clicked review submit button");
+
+              changeNotificationState({state:"state_2"})
+
+            },
           }
         ],
       });
